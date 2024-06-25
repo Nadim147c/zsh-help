@@ -6,7 +6,7 @@
 if (($+commands[bat])); then
   # ignore $@ to make `-help foobar` work
   function -help() {
-    bat --color=always -pplhelp
+    bat -pplhelp
   }
   function -help-alias() {
     for opt in $@; do
