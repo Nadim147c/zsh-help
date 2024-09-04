@@ -6,19 +6,31 @@
 if (($+commands[bat])); then
   # ignore $@ to make `-help foobar` work
   function -help() {
-    if [[ $COLOR == "0" ]]; then
-      command cat
-    elif [[ $COLOR == "1" ]]; then
-      bat -pplhelp
+    if [[ -n "$HELP_PAGER" ]]; then 
+      if [[ $COLOR == "0" ]]; then
+        command cat | eval "$HELP_PAGER"
+      elif [[ $COLOR == "1" ]]; then
+        bat -pplhelp | eval "$HELP_PAGER" 
+      else
+        bat -pplhelp --color=always | eval "$HELP_PAGER" 
+      fi
     else
-      bat -pplhelp --color=always
+      if [[ $COLOR == "0" ]]; then
+        command cat
+      elif [[ $COLOR == "1" ]]; then
+        bat -pplhelp
+      else
+        bat -pplhelp --color=always
+      fi
     fi
   }
+
   function -help-alias() {
     for opt in $@; do
       alias -g -- "$opt=\\$opt | -help"
     done
   }
+
   -help-alias --help
   # man
   -help-alias '-\?'
@@ -28,5 +40,6 @@ if (($+commands[bat])); then
   -help-alias --longhelp --fullhelp
   # gnome
   -help-alias --help-all --help-gapplication --help-gtk
+
   unfunction -- -help-alias
 fi
