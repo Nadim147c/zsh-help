@@ -8,11 +8,11 @@ if (($+commands[bat])); then
   function -help() {
     if [[ -n "$HELP_PAGER" ]]; then 
       if [[ $COLOR == "0" ]]; then
-        command cat | eval "$HELP_PAGER"
+        command cat | $(echo "$HELP_PAGER")
       elif [[ $COLOR == "1" ]]; then
-        bat -pplhelp | eval "$HELP_PAGER" 
+        bat -pplhelp | $(echo "$HELP_PAGER") 
       else
-        bat -pplhelp --color=always | eval "$HELP_PAGER" 
+        bat -pplhelp --color=always | $(echo "$HELP_PAGER") 
       fi
     else
       if [[ $COLOR == "0" ]]; then
